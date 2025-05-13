@@ -3,6 +3,13 @@
 This plugin is inspired by a YouTube video, 
 [link to video, go to around 7:00](https://www.youtube.com/watch?v=8kNF4TY6BVg)
 
+## Installation
+If you have tpm, add the following line to your tmux.conf file.
+
+```bash
+set -g @plugin 'FDIL501st/tmux-glow'
+```
+
 
 ## What this plugin do?
 When you press `prefix + g`, you will create a vertical pane,
