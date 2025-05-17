@@ -19,12 +19,12 @@ Choose a location to clone this repo. For these steps we will use `~/.config/tmu
 
 1. Clone the repo:
 ```bash
-git clone https://github.com/FDIL501st/tmux-glow.git ~/.config/tmux
+git clone https://github.com/FDIL501st/tmux-glow.git ~/.config/tmux/tmux-glow
 ```
 
 2. Add the following line to your `tmux.conf`:
 
-`run ~/.config/tmux/tmux-glow/tmux-glow.tmux`
+`run ~/.config/tmux/tmux-glow/tmux_glow.tmux`
 
 3. Reload (or restart) your tmux configurations
 
