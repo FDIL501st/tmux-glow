@@ -74,7 +74,7 @@ This is by design, not searching inside subdirectories will not be changed.
 
 ## Requirements
 - glow
-- fish
+- bash
 
 ### glow
 This plugin uses glow. 
@@ -83,31 +83,8 @@ as the command won't be found.
 
 [Link to glow GitHub](https://github.com/charmbracelet/glow)
 
-
-### fish
-At the moment the plugin requirements requires fish.
-You only need to be able to run fish scripts, as this plugin runs that, not bash scripts.
-Your main shell does not have to be fish.
-If you are able to run the test script in this repo with the following command:
-```fish
-fish test.fish
-```
-then you meet this requirement.
-
-This expected output is `"Hello world from fish"`
-
-[Link to fish shell](https://fishshell.com)
-
-
 ## Future plans
 ### Idea 1
-Remove the fish requirement by replacing the 
-tmux_glow.fish with tmux_glow.sh. This means rewriting with bash instead of fish. 
-
-This is because I assume most people are not like me that uses fish as their main shell. For bash or zsh users, I'm pretty sure they won't like the idea of having to install a shell just to run some scripts for a tmux plugin.
-
-I believe this plugin will be more accessible if I rewrite the fish scripts with bash instead.
-### Idea 2
 Have a way to kill the pane with the same keybind. 
 Turning `prefix+g` into a way to both open and close the glow pane.
 
@@ -128,7 +105,7 @@ then kill the pane with a keybind.
 Not much time saving compared to typing in the glow command
 to open up a file.
 
-### Idea 3
+### Idea 2
 Another idea is to change how this plugin works.
 Instead of basing it off of a markdown file existing in the current directory,
 make it based off of last command used/history.
