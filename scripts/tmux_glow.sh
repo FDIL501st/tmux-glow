@@ -31,4 +31,4 @@ main() {
 	tmux send -t: "$glow_command" C-m
 }
 
-main
+main "$@"
