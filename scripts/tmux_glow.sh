@@ -15,20 +15,17 @@ set_markdown_file() {
     fi
 }
 
-main() {
-	pane_current_path=$1
+# start of flow of script
+pane_current_path=$1
 
-	# change current directory of script to the current path
-	cd $pane_current_path
+# change current directory of script to the current path
+cd $pane_current_path
 
-	set_markdown_file
+set_markdown_file
 
-	# create_glow_command
-	glow_command="$glow_command $markdown_file"
+# create_glow_command
+glow_command="$glow_command $markdown_file"
 
-	tmux splitw -h -c "$pane_current_path"
+tmux splitw -h -c "$pane_current_path"
 
-	tmux send -t: "$glow_command" C-m
-}
-
-main
+tmux send -t: "$glow_command" C-m
