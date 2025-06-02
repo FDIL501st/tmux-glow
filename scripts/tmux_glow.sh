@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 glow_command="glow -tl"
 markdown_file=""
@@ -16,6 +16,8 @@ set_markdown_file() {
 }
 
 main() {
+	echo "In bash script"
+
 	pane_current_path=$1
 
 	# change current directory of script to the current path
