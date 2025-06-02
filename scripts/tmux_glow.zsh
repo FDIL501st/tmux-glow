@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+
 
 glow_command="glow -tl"
 markdown_file=""

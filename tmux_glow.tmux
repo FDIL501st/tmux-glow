@@ -10,7 +10,7 @@ tmux source "$CURRENT_DIR/tmux_glow_options.conf"
 GLOW_SHELL=$(tmux show -gv "@glow_shell")
 
 
-GLOW_SHELL="fish"
+GLOW_SHELL="zsh"
 
 if [[ $GLOW_SHELL == "bash" ]]; then
     # COMMAND="bash $CURRENT_DIR/scripts/tmux_glow.sh #{pane_current_path}"
@@ -21,10 +21,13 @@ elif [[ $GLOW_SHELL == "fish" ]]; then
     # COMMAND="fish $CURRENT_DIR/scripts/tmux_glow.fish #{pane_current_path}"
     tmux bind g run-shell "fish $CURRENT_DIR/scripts/tmux_glow.fish #{pane_current_path}"
 
+eli [[ $GLOW_SHELL == "zsh" ]]; then
+    # bind to zsh script
+    tmux bind g run-shell "zi $CURRENT_DIR/scripts/tmux_glow.zsh #{pane_current_path}"
 
 else
     echo "Unsupported value of @glow_shell: "$GLOW_SHELL
-    echo "Please use one of the supported values: bash, fish"
+    echo "Please use one of the supported values: bash, fish, zsh"
     exit 1
 fi
 
