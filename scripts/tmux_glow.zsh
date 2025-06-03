@@ -7,12 +7,13 @@ markdown_file=""
 # Function to set markdown_file
 set_markdown_file() {
     # Look for *.md files in the current directory (no subdirectories)
-    md_files=(*.md)
-
-    # if no .md files found, by default bash will set md_files to the string
-    # so check if the string was not set to know current directory has a md file
-    if [[ ${md_files[0]} != "*.md" ]]; then
-      markdown_file=${md_files[0]}
+    # Use (N) qualifier to return empty array if no matches
+    md_files=(*.md(N))
+    
+    # Check if we have any md files
+    # In Zsh, arrays are 1-indexed
+    if (( #md_files > 0 )); then
+        markdown_file=${md_files[1]}
     fi
 }
 
