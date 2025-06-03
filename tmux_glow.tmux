@@ -9,8 +9,11 @@ tmux source "$CURRENT_DIR/tmux_glow_options.conf"
 
 GLOW_SHELL=$(tmux show -gv "@glow_shell")
 
-
+# manual override to test plugin
 GLOW_SHELL="zsh"
+
+# unbind g if user already binded to something, this plugin will be using g
+tmux unbind -q g
 
 if [[ $GLOW_SHELL == "bash" ]]; then
     # COMMAND="bash $CURRENT_DIR/scripts/tmux_glow.sh #{pane_current_path}"
@@ -21,9 +24,9 @@ elif [[ $GLOW_SHELL == "fish" ]]; then
     # COMMAND="fish $CURRENT_DIR/scripts/tmux_glow.fish #{pane_current_path}"
     tmux bind g run-shell "fish $CURRENT_DIR/scripts/tmux_glow.fish #{pane_current_path}"
 
-eli [[ $GLOW_SHELL == "zsh" ]]; then
+elif [[ $GLOW_SHELL == "zsh" ]]; then
     # bind to zsh script
-    tmux bind g run-shell "zi $CURRENT_DIR/scripts/tmux_glow.zsh #{pane_current_path}"
+    tmux bind g run-shell "zsh $CURRENT_DIR/scripts/tmux_glow.zsh #{pane_current_path}"
 
 else
     echo "Unsupported value of @glow_shell: "$GLOW_SHELL

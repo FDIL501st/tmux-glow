@@ -17,7 +17,7 @@ set_markdown_file() {
 }
 
 main() {
-	echo "In bash script"
+	echo "In zsh script"
 
 	pane_current_path=$1
 
