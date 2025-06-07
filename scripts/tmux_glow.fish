@@ -11,17 +11,17 @@ function create_glow_command
     # split the cmd
     set command_split (string split ' ' $cmd) 
 
-    # find filename from command_split if command_split[1] is from an array of file edit/view commands
-    set view_edit_commands "emacs" "vim" "vi" "nvim" "nano" "micro" "ne" "cat" "bat" "less" "more" "most"
+    # # find filename from command_split if command_split[1] is from an array of file edit/view commands
+    # set view_edit_commands "emacs" "vim" "vi" "nvim" "nano" "micro" "ne" "cat" "bat" "less" "more" "most"
 
-    if not contains $command_split[1] $view_edit_commands
-        # did not get an expected file terminal editor, so no need to update glow command
-        return
-    end
+    # if not contains $command_split[1] $view_edit_commands
+    #     # did not get an expected file terminal editor, so no need to update glow command
+    #     return
+    # end
 
-    # maybe logic can be simplified by ignoring checking of command list above and only check for the filename if its there
-    # idea of check above is to only open up the file in glow if viewing/editing file in terminal
-    # by removing check, any command with the file as last arg can open the file in glow
+    # # maybe logic can be simplified by ignoring checking of command list above and only check for the filename if its there
+    # # idea of check above is to only open up the file in glow if viewing/editing file in terminal
+    # # by removing check, any command with the file as last arg can open the file in glow
 
     if not string match -r "(?<file>\S+.md)" $command_split[-1]
         # did not file a file name/path to a markdown, so no need to update glow command

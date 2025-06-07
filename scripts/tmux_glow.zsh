@@ -1,20 +1,25 @@
 #!/usr/bin/env zsh
 
-
 glow_command="glow -tl"
 markdown_file=""
 
 # Function to set markdown_file
 set_markdown_file() {
-    # Look for *.md files in the current directory (no subdirectories)
-    # Use (N) qualifier to return empty array if no matches
-    md_files=(*.md(N))
-    
-    # Check if we have any md files
-    # In Zsh, arrays are 1-indexed
-    if (( #md_files > 0 )); then
-        markdown_file=${md_files[1]}
-    fi
+	# look for .md file in last 5 commands in history (use 5 as a way to search within recently used commands)
+	md_file=$(history -5 | awk '$NF ~ /\.md$/ {print $NF}' | tail -n 1)
+	# use awk to get markdown file names, make an assumption that with terminal printing or editing of .md files
+	# the .md file will be the last argument
+
+	# use tail -n 1 so we use the latest one if multiple commands with .md files found by history
+
+    if [[ -z $md_file ]]; then
+	# TODO: remove debug message 
+		echo "No markdown file found"
+	else 
+		markdown_file=${md_file}
+	fi
+
+	
 }
 
 main() {

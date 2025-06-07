@@ -10,7 +10,7 @@ tmux source "$CURRENT_DIR/tmux_glow_options.conf"
 GLOW_SHELL=$(tmux show -gv "@glow_shell")
 
 # manual override to test plugin
-GLOW_SHELL="zsh"
+GLOW_SHELL="fish"
 
 # unbind g if user already binded to something, this plugin will be using g
 tmux unbind -q g
