@@ -5,7 +5,7 @@ markdown_file=""
 BASH_HISTFILE="${HOME}/.bash_history"
 
 
-# Function that asserts that BASH_HISTFILE is a valid file
+# function that asserts that BASH_HISTFILE is a valid file
 assert_bash_histfile_exists() {
 	if ! [[ -f $BASH_HISTFILE ]]; then
 		echo "Unable to find the bash history file: $BASH_HISTFILE"
@@ -13,35 +13,27 @@ assert_bash_histfile_exists() {
 	fi
 }
 
-# Function to set markdown_file
+# function to set markdown_file
 set_markdown_file() {
-	
-	# first get last 5 lines from history (assumes that each line is a single command)
-	# if a command is multi-line, this logic will fail
-
-	echo "Last 5 lines: $(tail -n 5 "$BASH_HISTFILE")"
-
-	# look for .md file in last 5 commands in history
-	md_file=$(tail -n 5 "$BASH_HISTFILE" | awk '$NF ~ /\.md$/ {print $NF}' | tail -n 1)
-	# use awk to get markdown file names, make an assumption that with terminal printing or editing of .md files
+	# look for .md file in last 10 commands in history
+	# we make an assumption each line is a command, multi-line commands break this assumption
+	readarray -t md_files < <(tail -n 10 "$BASH_HISTFILE" | awk '$NF ~ /\.md$/ {print $NF}' | tac)
+	# use awk to get markdown file names, we make an assumption that with terminal printing or editing of .md files
 	# the .md file will be the last argument
 
-	# use tail -n 1 so we use the latest one if multiple commands with .md files found by history
+	# we pipe result into tac to reverse the result from awk (so first element is most recent used command)
 
-
-	# BUG: bash history inside tmux not stored in bash_history
-
-	# fish does not have this problem as can use history, in bash can't use history to get history in shell scripts
-
-	echo "md_file: $md_file"
-
-    if [[ -z $md_file ]]; then
-	# TODO: remove debug message 
-		echo "No markdown file found"
-	else 
-		markdown_file=$md_file
-	fi
-
+	# we need to check each md_file found if its valid
+	# as it is possible to match *.md (eg. ls *.md) or 
+	# commands from a different session that appened to history more recently
+	for md_file in "${md_files[@]}"; do
+		if [[ -f $md_file ]]; then
+			markdown_file=$md_file 
+			break
+		fi 
+	done
+	# if no md_file found or none worked, then we do nothing
+	# it is safe for markdown_file to stay ""
 }
 
 main() {

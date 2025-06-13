@@ -3,6 +3,17 @@
 This plugin is inspired by a YouTube video, 
 [link to video, go to around 7:00](https://www.youtube.com/watch?v=8kNF4TY6BVg)
 
+## Requirements
+- glow
+
+### glow
+This plugin uses glow. 
+Not having glow will throw errors when trying to use this plugin 
+as the command won't be found.
+
+[Link to glow GitHub](https://github.com/charmbracelet/glow)
+
+
 ## Installation
 
 ### TPM (Recommended)
@@ -12,7 +23,7 @@ If you have tpm, add the following line to your tmux.conf file.
 ```bash
 set -g @plugin 'FDIL501st/tmux-glow'
 ```
-
+Then reload your tmux configurations.
 ### Manual installation
 
 Choose a location to clone this repo. For these steps we will use `~/.config/tmux/`.
@@ -26,7 +37,36 @@ git clone https://github.com/FDIL501st/tmux-glow.git ~/.config/tmux/tmux-glow
 
 `run ~/.config/tmux/tmux-glow/tmux_glow.tmux`
 
-3. Reload (or restart) your tmux configurations
+3. Reload your tmux configurations
+
+### Installation Part II
+
+#### bash users
+If your default shell in tmux is bash, then you will need to edit your `.bashrc`.
+
+Add the following lines to `.bashrc` if you don't already have these:
+
+```bash
+PROMPT_COMMAND="history -a"
+```
+
+Setting `PROMPT_COMMAND` is essential for this plugin to work. What it does is the commands you type are immediatly appended
+to your bash history file. This is important as when looking for a recently used markdown file, this plugin
+looks into your bash history file. Without setting PROMPT_COMMAND, by default bash will only write your current's session history into your history file when it closes. This means when the script looks into your bash history file, without setting `PROMPT_COMMAND`, the script will not be able to view your current session's most recent command.
+
+If you already have set PROMPT_COMMAND without `history -a`, you can add the following line instead:
+```bash
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+```
+This will ensure PROMPT_COMMAND has your previous settings, and `history -a` needed for this plugin to work.
+
+#### zsh users
+TODO: Implement using zsh history
+
+
+#### fish users
+No extra configurations needed. 
+
 
 ## What this plugin do?
 When you press `prefix + g`, you will create a vertical pane,
@@ -37,7 +77,7 @@ Otherwise you will need to look for your file within glow.
 ### Example of use case
 When editing a markdown in the terminal, you can use this plugin to quickly create a preview pane on the right to see the markdown render while you edit it.
 
-### Some before and after images of this plugin in action
+### Some before and after images of this plugin in action (Outdated images)
 
 Below I have 3 pairs of before and after images. The after is the result of what you see after pressing `prefix + g`.
 
@@ -72,17 +112,6 @@ A minor limitation is that this plugin will not search inside subdirectories.
 This is by design, not searching inside subdirectories will not be changed.
 
 
-## Requirements
-- glow
-- bash
-
-### glow
-This plugin uses glow. 
-Not having glow will throw errors when trying to use this plugin 
-as the command won't be found.
-
-[Link to glow GitHub](https://github.com/charmbracelet/glow)
-
 ## Future plans
 ### Idea 1
 Have a way to kill the pane with the same keybind. 
@@ -105,7 +134,7 @@ then kill the pane with a keybind.
 Not much time saving compared to typing in the glow command
 to open up a file.
 
-### Idea 2
+### Idea 2 (Currently being worked on)
 Another idea is to change how this plugin works.
 Instead of basing it off of a markdown file existing in the current directory,
 make it based off of last command used/history.
