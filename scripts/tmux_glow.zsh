@@ -2,28 +2,36 @@
 
 glow_command="glow -tl"
 markdown_file=""
+ZSH_HISTFILE="${HOME}/.zhistory"
 
-# Function to set markdown_file
-set_markdown_file() {
-	# look for .md file in last 5 commands in history (use 5 as a way to search within recently used commands)
-	md_file=$(history -5 | awk '$NF ~ /\.md$/ {print $NF}' | tail -n 1)
-	# use awk to get markdown file names, make an assumption that with terminal printing or editing of .md files
-	# the .md file will be the last argument
 
-	# use tail -n 1 so we use the latest one if multiple commands with .md files found by history
-
-    if [[ -z $md_file ]]; then
-	# TODO: remove debug message 
-		echo "No markdown file found"
-	else 
-		markdown_file=${md_file}
+# function that asserts that ZSH_HISTFILE is a valid file
+assert_zsh_histfile_exists() {
+	if ! [[ -f $ZSH_HISTFILE ]]; then
+		echo "Unable to find the zsh history file: $ZSH_HISTFILE"
+		exit 1
 	fi
+}
 
-	
+# function to set markdown_file
+set_markdown_file() {
+	# read comments of tmux_glow.sh, this does that, replacing some bash things with zsh 
+
+	md_files=( "${(f)$(tail -n 10 "$ZSH_HISTFILE" | awk '$NF ~ /\.md$/ {print $NF}' | tac)}" )
+
+	for md_file in "${md_files[@]}"; do
+		if [[ -f $md_file ]]; then
+			markdown_file=$md_file 
+			break
+		fi 
+	done
 }
 
 main() {
 	echo "In zsh script"
+
+	# first assert that bash history file exists
+	assert_zsh_histfile_exists
 
 	pane_current_path=$1
 

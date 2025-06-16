@@ -41,9 +41,13 @@ git clone https://github.com/FDIL501st/tmux-glow.git ~/.config/tmux/tmux-glow
 
 ### Installation Part II
 
-#### bash users
-If your default shell in tmux is bash, then you will need to edit your `.bashrc`.
+Depending on your default shell (for tmux), you might need to edit some shell configuration files.
+For example:
+- `.bashrc`
+- `.zshrc`
 
+
+#### bash users
 Add the following lines to `.bashrc` if you don't already have these:
 
 ```bash
@@ -61,8 +65,14 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 This will ensure PROMPT_COMMAND has your previous settings, and `history -a` needed for this plugin to work.
 
 #### zsh users
-TODO: Implement using zsh history
+Add the following line to `.zshrc` if you don't already have this:
 
+```zsh
+setopt INC_APPEND_HISTORY
+```
+What this does is have your zsh history file immediately have the commands you used append to it, instead of when you close your session (which is default).
+
+This plugin looks into your zsh history file for your recently used commands, so the file not being up to date to your session history will make this plugin not work.
 
 #### fish users
 No extra configurations needed. 
