@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 
-glow_command="glow -tl"
+# global variables
 markdown_file=""
-ZSH_HISTFILE="${HOME}/.zhistory"
+ZSH_HISTFILE=""
 
 
 # function that asserts that ZSH_HISTFILE is a valid file
@@ -17,32 +17,35 @@ assert_zsh_histfile_exists() {
 set_markdown_file() {
 	# read comments of tmux_glow.sh, this does that, replacing some bash things with zsh 
 
-	md_files=( "${(f)$(tail -n 10 "$ZSH_HISTFILE" | awk '$NF ~ /\.md$/ {print $NF}' | tac)}" )
+	cmds=(${(f)"$(tail -n 10 "$ZSH_HISTFILE" | tac)"})
+
+	md_files=( ${(f)"$(echo "${cmds[@]}" | grep -o -E '\S+\.md')"} )
 
 	for md_file in "${md_files[@]}"; do
-		if [[ -f $md_file ]]; then
-			markdown_file=$md_file 
-			break
+		if [[ -f "$md_file" ]]; then
+			markdown_file="$md_file"
+			return
 		fi 
 	done
 }
 
 main() {
-	echo "In zsh script"
+	ZSH_HISTFILE="$3"
 
 	# first assert that bash history file exists
 	assert_zsh_histfile_exists
 
-	pane_current_path=$1
+	pane_current_path="$1"
 
-	# change current directory of script to the current path
+	# change current directory of script to the current path of pane
 	cd "$pane_current_path" || exit 
 	# use || exit in case cd fails, then programs stops cd exit code
 
-	set_markdown_file
+	# use (()) so string get converted to a number, the inner brackets is for arthimetics
+	set_markdown_file $(($2))
 
 	# create_glow_command
-	glow_command="$glow_command $markdown_file"
+	glow_command="glow -tl $markdown_file"
 
 	tmux splitw -h -c "$pane_current_path"
 

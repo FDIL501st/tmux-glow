@@ -39,7 +39,52 @@ git clone https://github.com/FDIL501st/tmux-glow.git ~/.config/tmux/tmux-glow
 
 3. Reload your tmux configurations
 
+
 ### Installation Part II
+
+There might be some options you might have to add into your `tmux.conf` file.
+
+##### @glow_shell
+
+This is the most important option if your default shell (for tmux) is not bash.
+You need to set this to be the same as your default shell.
+
+Below are examples of what to add if you use fish or zsh.
+
+`set -g @glow_shell "fish"`
+
+`set -g @glow_shell "zsh"`
+
+###### Note: Other shells are not supported at the moment. This means this plugin will not work for you, sorry. I will be working on adding support for other shells.
+
+##### @glow_bash_histfile
+
+This option might need to be set if you are a bash user.
+
+This option controls what file the plugin looks into for your bash command history. 
+
+If your bash history is written in `~/.bash_history`, then you don't need to add this option. That is the default place this plugin looks at.
+
+If your bash history is written somehwhere else, then you will need to add this option. Below is an example if your bash history file is `~./histfile`:
+
+`set -g @glow_bash_histfile "~./histfile"`
+
+
+##### @glow_zsh_histfile
+
+This option might need to be set if you are a zsh user (you set @glow_shell to zsh).
+
+This option controls what file the plugin looks into for your zsh command history. 
+
+The default file this plugin looks for is `~/.zsh_history`.
+If that is where you zsh history is written in, you don't need to set this option.
+
+Below is an example if your zsh history file is `~/.zhistory`:
+
+`set -g @glow_bash_histfile "~./zhistory"`
+
+
+### Installation Part III
 
 Depending on your default shell (for tmux), you might need to edit some shell configuration files.
 For example:
@@ -158,3 +203,11 @@ unlike current directory based. Each shell has its own history.
 Depending on a user's main shell, the script checking the history 
 must match the user's main shell. Otherwise the plugin will never find
 a markdown file to open.
+
+
+### Idea 3
+Reorganize the installation part II and III steps. Group instructions by shell, 
+so a user can get all installation steps for their shell in one section. 
+
+Currently any user will have to jump sections for all the information needed.
+

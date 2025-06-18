@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-glow_command="glow -tl"
+# global variables
 markdown_file=""
-BASH_HISTFILE="${HOME}/.bash_history"
+BASH_HISTFILE=""
 
 
 # function that asserts that BASH_HISTFILE is a valid file
-assert_bash_histfile_exists() {
+function assert_bash_histfile_exists() {
 	if ! [[ -f $BASH_HISTFILE ]]; then
 		echo "Unable to find the bash history file: $BASH_HISTFILE"
 		exit 1
@@ -14,44 +14,42 @@ assert_bash_histfile_exists() {
 }
 
 # function to set markdown_file
-set_markdown_file() {
-	# look for .md file in last 10 commands in history
+function set_markdown_file() {
+	# look for .md file in last 10 commands in history (newest to oldest)
 	# we make an assumption each line is a command, multi-line commands break this assumption
-	readarray -t md_files < <(tail -n 10 "$BASH_HISTFILE" | awk '$NF ~ /\.md$/ {print $NF}' | tac)
-	# use awk to get markdown file names, we make an assumption that with terminal printing or editing of .md files
-	# the .md file will be the last argument
+	readarray -t cmds < <(tail -n "$1" "$BASH_HISTFILE"| tac)
 
-	# we pipe result into tac to reverse the result from awk (so first element is most recent used command)
+	# Extract all substrings matching '\S+\.md' (non-space characters followed by .md)
+	readarray -t md_files < <(echo "${cmds[@]}" | grep -o -E '\S+\.md')
 
-	# we need to check each md_file found if its valid
-	# as it is possible to match *.md (eg. ls *.md) or 
-	# commands from a different session that appened to history more recently
+	# Check each matched file and output the first existing one
 	for md_file in "${md_files[@]}"; do
-		if [[ -f $md_file ]]; then
-			markdown_file=$md_file 
-			break
-		fi 
+		if [[ -f "$md_file" ]]; then
+			markdown_file="$md_file"
+			return
+		fi
 	done
 	# if no md_file found or none worked, then we do nothing
 	# it is safe for markdown_file to stay ""
 }
 
-main() {
-	echo "In bash script"
+function main() {
+	BASH_HISTFILE="$3"
 
 	# first assert that bash history file exists
 	assert_bash_histfile_exists
 
-	pane_current_path=$1
+	pane_current_path="$1"
 
-	# change current directory of script to the current path
+	# change current directory of script to the current path of pane
 	cd "$pane_current_path" || exit 
 	# use || exit in case cd fails, then programs stops cd exit code
 
-	set_markdown_file
+	# use (()) so string get converted to a number,  the inner brackets is for arthimetics
+	set_markdown_file $(($2))
 
 	# create_glow_command
-	glow_command="$glow_command $markdown_file"
+	glow_command="glow -tl $markdown_file"
 
 	tmux splitw -h -c "$pane_current_path"
 

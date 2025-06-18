@@ -1,48 +1,36 @@
-#!/usr/bin/env bash
-
-set glow_command "glow -tl"
+#!/usr/bin/env fish
 
 set markdown_file ""
 
-function create_glow_command
-    # get most recent used command
-    set cmd (history -n 1)
-    
-    # split the cmd
-    set command_split (string split ' ' $cmd) 
+function set_markdown_file
+    set cmds (history -n $argv[1])
+    # by default is newest to oldest (what we want)
+    echo (count $cmds)
 
-    # # find filename from command_split if command_split[1] is from an array of file edit/view commands
-    # set view_edit_commands "emacs" "vim" "vi" "nvim" "nano" "micro" "ne" "cat" "bat" "less" "more" "most"
+    set md_files (string match -r -a '\S+\.md' -- $cmds)
 
-    # if not contains $command_split[1] $view_edit_commands
-    #     # did not get an expected file terminal editor, so no need to update glow command
-    #     return
-    # end
+    # got all .md files from past commands
 
-    # # maybe logic can be simplified by ignoring checking of command list above and only check for the filename if its there
-    # # idea of check above is to only open up the file in glow if viewing/editing file in terminal
-    # # by removing check, any command with the file as last arg can open the file in glow
+    # set the first one that is valid
 
-    if not string match -r "(?<file>\S+.md)" $command_split[-1]
-        # did not file a file name/path to a markdown, so no need to update glow command
-        return
+    for md_file in $md_files
+        if test -f "$md_file"
+            set markdown_file[1] $md_file
+            return
+        end
     end
-
-    set markdown_file[1] $file
 end
 
 function main
-    echo "In fish script"
-
     set pane_current_path $argv[1]
 
-    # change current directory of script to the current path
+    # change current directory of script to the current path of pane
     cd $pane_current_path
 
     # set_markdown_file
-    create_glow_command
+    set_markdown_file $argv[2]
 
-    set glow_command[2] $markdown_file 
+    set glow_command "glow -tl $markdown_file" 
 
     tmux splitw -h -c "$pane_current_path"
 
