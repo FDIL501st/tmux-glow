@@ -5,7 +5,6 @@ set markdown_file ""
 function set_markdown_file
     set cmds (history -n $argv[1])
     # by default is newest to oldest (what we want)
-    echo (count $cmds)
 
     set md_files (string match -r -a '\S+\.md' -- $cmds)
 
